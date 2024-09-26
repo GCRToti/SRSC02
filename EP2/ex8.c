@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
-
+ 
 #define MAX 1
 
 void *function(void* params);
