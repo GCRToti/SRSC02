@@ -1,0 +1,5 @@
+1)
+
+b) Sim, é possível haver fragmentação externa no particionamento Buddy. Isso ocorre porque o algoritmo Buddy sempre aloca blocos de memória em potências de 2. Quando um processo solicita uma quantidade de memória que não é uma potência de 2, o algoritmo precisa arredondar o valor solicitado para a próxima potência de 2. Isso resulta em blocos de memória parcialmente utilizados, com o restante do bloco ficando inutilizado. Essa parte não utilizada dentro de blocos maiores do que o necessário é o que caracteriza a fragmentação externa.
+
+Por exemplo, se um processo requisita 130 MB, o algoritmo Buddy alocará 256 MB (a próxima potência de 2), gerando uma fragmentação de 126 MB (256 MB - 130 MB) que não poderá ser aproveitada por outros processos.
