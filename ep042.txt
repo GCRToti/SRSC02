@@ -1,0 +1,33 @@
+# Refazendo o gráfico no estilo Gantt para representar o uso de memória
+
+# Definindo as tarefas (partições) e seus respectivos tamanhos
+tasks = [
+    ("A", 0, 256),  # Partição A (256 MB)
+    ("B", 256, 1024),  # Partição B (1024 MB)
+    ("C", 1280, 1024),  # Partição C (1024 MB)
+    ("D", 2304, 512),  # Partição D (512 MB)
+    ("E", 2816, 256)   # Partição E (256 MB)
+]
+
+# Definindo a alocação do processo X (240 MB na partição A)
+process_X = ("X", 0, 240)  # Processo X será alocado nos primeiros 240 MB da partição A
+
+# Criando o gráfico Gantt
+fig, ax = plt.subplots(figsize=(10, 6))
+
+# Adicionar barras para as partições
+for task in tasks:
+    ax.barh(task[0], task[2], left=task[1], color='skyblue', edgecolor='black', label=f'{task[0]} ({task[2]} MB)')
+
+# Adicionar a barra para o processo X
+ax.barh(process_X[0], process_X[2], left=process_X[1], color='lightcoral', edgecolor='black', label='X (240 MB)')
+
+# Configurações do gráfico
+ax.set_xlabel('Memória (MB)')
+ax.set_title('Gráfico de uso da memória (Particionamento Buddy) - Estilo Gantt')
+ax.set_xlim(0, 4000)
+ax.set_yticks([task[0] for task in tasks] + [process_X[0]])
+ax.grid(True, axis='x')
+
+# Exibir o gráfico
+plt.show()
