@@ -25,11 +25,6 @@ typedef struct {
     unsigned long int cluster;// cluster inicial
 } arquivo;
 
-typedef struct {
-    char dados[512];
-    unsigned long int prox;
-} cluster;
-
 // Função para verificar se o arquivo é deletado
 int is_deleted(arquivo *arq) {
     return (unsigned char) arq->nome[0] == 0xEB;
@@ -61,8 +56,8 @@ void listar_completo(arquivo arquivos[], int count) {
         }
         printf("Nome: %s.%s\n", arquivos[i].nome, arquivos[i].extensao);
         printf("Tamanho: %lu bytes\n", arquivos[i].tamanho);
-        printf("Criação: %d/%d/%d %d:%d:%d\n", arquivos[i].criacao.dia, arquivos[i].criacao.mes, arquivos[i].criacao.ano, arquivos[i].criacao.hora, arquivos[i].criacao.min, arquivos[i].criacao.seg);
-        printf("Acesso: %d/%d/%d %d:%d:%d\n", arquivos[i].acesso.dia, arquivos[i].acesso.mes, arquivos[i].acesso.ano, arquivos[i].acesso.hora, arquivos[i].acesso.min, arquivos[i].acesso.seg);
+        printf("Criação: %02d/%02d/%04d %02d:%02d:%02d\n", arquivos[i].criacao.dia, arquivos[i].criacao.mes, arquivos[i].criacao.ano, arquivos[i].criacao.hora, arquivos[i].criacao.min, arquivos[i].criacao.seg);
+        printf("Acesso: %02d/%02d/%04d %02d:%02d:%02d\n", arquivos[i].acesso.dia, arquivos[i].acesso.mes, arquivos[i].acesso.ano, arquivos[i].acesso.hora, arquivos[i].acesso.min, arquivos[i].acesso.seg);
 
         printf("\n");
     }
