@@ -32,7 +32,7 @@ typedef struct {
 
 // Função para verificar se o arquivo é deletado
 int is_deleted(arquivo *arq) {
-    return arq->nome[0] == 0xEB;
+    return (unsigned char) arq->nome[0] == 0xEB;
 }
 
 // Função para listar arquivos conforme o formato "nome.extensao"
@@ -63,7 +63,7 @@ void listar_completo(arquivo arquivos[], int count) {
         printf("Tamanho: %lu bytes\n", arquivos[i].tamanho);
         printf("Criação: %d/%d/%d %d:%d:%d\n", arquivos[i].criacao.dia, arquivos[i].criacao.mes, arquivos[i].criacao.ano, arquivos[i].criacao.hora, arquivos[i].criacao.min, arquivos[i].criacao.seg);
         printf("Acesso: %d/%d/%d %d:%d:%d\n", arquivos[i].acesso.dia, arquivos[i].acesso.mes, arquivos[i].acesso.ano, arquivos[i].acesso.hora, arquivos[i].acesso.min, arquivos[i].acesso.seg);
-        // Imprimir outras informações se necessário
+
         printf("\n");
     }
 }
@@ -73,7 +73,7 @@ void listar_sistema(arquivo arquivos[], int count) {
     int printed = 0;
     for (int i = 0; i < count; i++) {
         if (arquivos[i].sistema && !is_deleted(&arquivos[i])) {
-            printf("%-12s.%s ", arquivos[i].nome, arquivos[i].extensao);
+            printf("%s.%s ", arquivos[i].nome, arquivos[i].extensao);
             printed++;
             if (printed % 2 == 0) {
                 printf("\n");
@@ -89,37 +89,65 @@ int main(int argc, char* argv[])
 {
     arquivo arquivos[FILE_AMOUNT];
     int i;
-    int qtd = 3;
+    int qtd = FILE_AMOUNT;
     
 
-    strcpy(arquivos[0].nome, "arquivo1");
-    strcpy(arquivos[0].extensao, "txt");
+    strcpy(arquivos[0].nome, "arq1\0");
+    strcpy(arquivos[0].extensao, "txt\0");
     arquivos[0].sistema = 0;
     arquivos[0].hidden = 0;
     arquivos[0].tamanho = 1024;
     arquivos[0].cluster = 1;
 
-    strcpy(arquivos[1].nome, "arquivo2");
-    strcpy(arquivos[1].extensao, "dat");
+    strcpy(arquivos[1].nome, "arq2\0");
+    strcpy(arquivos[1].extensao, "dat\0");
     arquivos[1].sistema = 1;
     arquivos[1].hidden = 0;
     arquivos[1].tamanho = 512;
-    arquivos[1].cluster = 2;
+    arquivos[1].cluster = 3;
 
-    strcpy(arquivos[2].nome, "oculto");
-    strcpy(arquivos[2].extensao, "bin");
+    strcpy(arquivos[2].nome, "oculto\0");
+    strcpy(arquivos[2].extensao, "bin\0");
     arquivos[2].sistema = 0;
     arquivos[2].hidden = 1;
     arquivos[2].tamanho = 2048;
-    arquivos[2].cluster = 3;
+    arquivos[2].cluster = 4;
 
     char deletado_nome[8] = {0xEB, 'd', 'e', 'l', '\0', ' ', ' ', ' '};
     strcpy(arquivos[3].nome, deletado_nome);
-    strcpy(arquivos[3].extensao, "old");
+    strcpy(arquivos[3].extensao, "old\0");
     arquivos[3].sistema = 0;
     arquivos[3].hidden = 0;
     arquivos[3].tamanho = 256;
-    arquivos[3].cluster = 4;
+    arquivos[3].cluster = 8;
+
+    strcpy(arquivos[4].nome, "arq3\0");
+    strcpy(arquivos[4].extensao, "txt\0");
+    arquivos[4].sistema = 0;
+    arquivos[4].hidden = 0;
+    arquivos[4].tamanho = 512;
+    arquivos[4].cluster = 9;
+
+    strcpy(arquivos[5].nome, "arq4\0");
+    strcpy(arquivos[5].extensao, "txt\0");
+    arquivos[5].sistema = 0;
+    arquivos[5].hidden = 0;
+    arquivos[5].tamanho = 512;
+    arquivos[5].cluster = 10;
+
+    strcpy(arquivos[6].nome, "arq5\0");
+    strcpy(arquivos[6].extensao, "bat\0");
+    arquivos[6].sistema = 0;
+    arquivos[6].hidden = 0;
+    arquivos[6].tamanho = 1024;
+    arquivos[6].cluster = 11;
+
+    strcpy(arquivos[7].nome, "arq6\0");
+    strcpy(arquivos[7].extensao, "dat\0");
+    arquivos[7].sistema = 1;
+    arquivos[7].hidden = 0;
+    arquivos[7].tamanho = 256;
+    arquivos[7].cluster = 13;
 
     for (i = 0; i < FILE_AMOUNT; i++)
     {
