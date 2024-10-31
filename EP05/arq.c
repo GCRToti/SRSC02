@@ -1,3 +1,11 @@
+/*
+Universidade Federal de Itajubá
+SRSC02 – Sistemas Operacionais
+Gabriel Carneiro Roque Toti Silva - 2023005594
+Antony Souza Siqueira - 2022015120
+EP05 - Implementação do Sistemas de Arquivos (Exercício 1)
+*/
+
 #include <stdio.h>
 #include <string.h>
 
@@ -25,16 +33,25 @@ typedef struct {
     unsigned long int cluster;// cluster inicial
 } arquivo;
 
+typedef struct {
+    char dados[512];
+    unsigned long int prox;
+} cluster;
+
+void listarSistema(arquivo arquivos[], int count);
+void listaCompleto(arquivo arquivos[], int count);
+void listarSimples(arquivo arquivos[], int count, int por_linha);
+
 // Função para verificar se o arquivo é deletado
-int is_deleted(arquivo *arq) {
+int isDeleted(arquivo *arq) {
     return (unsigned char) arq->nome[0] == 0xEB;
 }
 
 // Função para listar arquivos conforme o formato "nome.extensao"
-void listar_simples(arquivo arquivos[], int count, int por_linha) {
+void listarSimples(arquivo arquivos[], int count, int por_linha) {
     int printed = 0;
     for (int i = 0; i < count + 1; i++) {
-        if (is_deleted(&arquivos[i]) || arquivos[i].sistema || arquivos[i].hidden) {
+        if (isDeleted(&arquivos[i]) || arquivos[i].sistema || arquivos[i].hidden) {
             continue;
         }
         printf("%s.%s ", arquivos[i].nome, arquivos[i].extensao);
@@ -49,9 +66,9 @@ void listar_simples(arquivo arquivos[], int count, int por_linha) {
 }
 
 // Função para listar todos os dados dos arquivos
-void listar_completo(arquivo arquivos[], int count) {
+void listaCompleto(arquivo arquivos[], int count) {
     for (int i = 0; i < count; i++) {
-        if (is_deleted(&arquivos[i]) || arquivos[i].sistema || arquivos[i].hidden) {
+        if (isDeleted(&arquivos[i]) || arquivos[i].sistema || arquivos[i].hidden) {
             continue;
         }
         printf("Nome: %s.%s\n", arquivos[i].nome, arquivos[i].extensao);
@@ -64,10 +81,11 @@ void listar_completo(arquivo arquivos[], int count) {
 }
 
 // Função para listar arquivos com proteção de sistema
-void listar_sistema(arquivo arquivos[], int count) {
+
+void listarSistema(arquivo arquivos[], int count) {
     int printed = 0;
     for (int i = 0; i < count; i++) {
-        if (arquivos[i].sistema && !is_deleted(&arquivos[i])) {
+        if (arquivos[i].sistema && !isDeleted(&arquivos[i])) {
             printf("%s.%s ", arquivos[i].nome, arquivos[i].extensao);
             printed++;
             if (printed % 2 == 0) {
@@ -86,7 +104,7 @@ int main(int argc, char* argv[])
     int i;
     int qtd = FILE_AMOUNT;
     
-
+    // cria os arquivos a serem lidos
     strcpy(arquivos[0].nome, "arq1\0");
     strcpy(arquivos[0].extensao, "txt\0");
     arquivos[0].sistema = 0;
@@ -153,13 +171,13 @@ int main(int argc, char* argv[])
     }
 
     if (argc == 1) {
-        listar_simples(arquivos, qtd, 2);
+        listarSimples(arquivos, qtd, 2);
     } else if (strcmp(argv[1], "-a") == 0) {
-        listar_completo(arquivos, qtd);
+        listaCompleto(arquivos, qtd);
     } else if (strcmp(argv[1], "-s") == 0) {
-        listar_sistema(arquivos, qtd);
+        listarSistema(arquivos, qtd);
     } else if (strcmp(argv[1], "-w") == 0) {
-        listar_simples(arquivos, qtd, 4);
+        listarSimples(arquivos, qtd, 4);
     } else {
         printf("Opção inválida para arq\n");
     }
